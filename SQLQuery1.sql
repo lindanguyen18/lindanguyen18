@@ -1,0 +1,1 @@
+exec sp_changedbowner 'DESKTOP-5B06M07\Tyler'
