@@ -81,11 +81,6 @@
 --group by Name
 --order by HighestPayRate desc
 
-select 
-from 
-
-
-
 
 
 
