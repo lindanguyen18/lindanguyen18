@@ -1,51 +1,52 @@
---CREATE PROC spUpdateProductDiscount
---@ProductID int, @DiscountPercent money
---AS
---IF (@DiscountPercent < 0)
---THROW 50003, 'Value for DiscountPercent must be a positive number.', 3;
---ELSE
---UPDATE Products
---SET DiscountPercent = @DiscountPercent
---WHERE ProductID = @ProductID;
+--Create procedure Update Product Discount with execution
+CREATE PROC spUpdateProductDiscount
+@ProductID int, @DiscountPercent money
+AS
+IF (@DiscountPercent < 0)
+THROW 50003, 'Value for DiscountPercent must be a positive number.', 3;
+ELSE
+UPDATE Products
+SET DiscountPercent = @DiscountPercent
+WHERE ProductID = @ProductID;
 
---EXEC spUpdateProductDiscount
---@ProductID = 11,
---@DiscountPercent = 30;
---SELECT * FROM Products
---WHERE ProductID = 11;
+EXEC spUpdateProductDiscount
+@ProductID = 11,
+@DiscountPercent = 30;
+SELECT * FROM Products
+WHERE ProductID = 11;
 
---EXEC spUpdateProductDiscount
---@ProductID = 11,
---@DiscountPercent = -20;
+EXEC spUpdateProductDiscount
+@ProductID = 11,
+@DiscountPercent = -20;
 
+ create trigger update products table 
+CREATE TRIGGER Products_UPDATE
+ON Products
+AFTER UPDATE
+AS
+IF ((SELECT DiscountPercent
+FROM Products
+WHERE ProductID IN (SELECT ProductID FROM Inserted)) > 100 OR
+(SELECT DiscountPercent
+FROM Products
+WHERE ProductID IN (SELECT ProductID FROM Inserted)) < 0)
+THROW 50004, 'Value for DiscountPercent must be between 0 and 100.', 4;
+IF ((SELECT DiscountPercent
+FROM Products
+WHERE ProductID IN (SELECT ProductID FROM Inserted)) < 1)
+UPDATE Products
+SET DiscountPercent = DiscountPercent * 100
+WHERE ProductID IN (SELECT ProductID FROM Inserted);
 
---CREATE TRIGGER Products_UPDATE
---ON Products
---AFTER UPDATE
---AS
---IF ((SELECT DiscountPercent
---FROM Products
---WHERE ProductID IN (SELECT ProductID FROM Inserted)) > 100 OR
---(SELECT DiscountPercent
---FROM Products
---WHERE ProductID IN (SELECT ProductID FROM Inserted)) < 0)
---THROW 50004, 'Value for DiscountPercent must be between 0 and 100.', 4;
---IF ((SELECT DiscountPercent
---FROM Products
---WHERE ProductID IN (SELECT ProductID FROM Inserted)) < 1)
---UPDATE Products
---SET DiscountPercent = DiscountPercent * 100
---WHERE ProductID IN (SELECT ProductID FROM Inserted);
+UPDATE Products
+SET DiscountPercent = 101
+WHERE ProductID = 11;
 
---UPDATE Products
---SET DiscountPercent = 101
---WHERE ProductID = 11;
-
---UPDATE Products
---SET DiscountPercent = 0.2
---WHERE ProductID = 11;
---SELECT * FROM Products
---WHERE ProductID = 11;
+UPDATE Products
+SET DiscountPercent = 0.2
+WHERE ProductID = 11;
+SELECT * FROM Products
+WHERE ProductID = 11;
 
 --CREATE TRIGGER Products_INSERT
 --ON Products
