@@ -68,5 +68,5 @@
 --select Person.BusinessEntityID, LastName, FirstName, JobTitle, BirthDate from Person.Person, HumanResources.Employee
 --order by LastName desc ,FirstName
 
-select * from Production.Product
-where name like '%derailleur%'
+--select * from Production.Product
+--where name like '%derailleur%'
