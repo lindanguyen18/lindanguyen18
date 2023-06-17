@@ -1,6 +1,5 @@
-/* Database Systems, Coronel/Morris */
-/* Type of SQL : MySQL */
-/* HEPNER CHANGES */ 
+/* Database Systems*/
+/* Type of SQL : MySQL */ 
 DROP DATABASE if exists PROB1; 
 CREATE DATABASE PROB1;
 USE PROB1;
